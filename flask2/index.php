@@ -13,7 +13,7 @@
         <link href="css/signin.css" rel="stylesheet">
     </head>
     <body class='text-center'>
-        <form class="form-signin">
+        <form class="form-signin" method="post" action="#">
             <h1>FLASK</h1>
             </br>
             <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
