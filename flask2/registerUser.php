@@ -13,7 +13,7 @@
         <link href="css/signin.css" rel="stylesheet">
     </head>
     <body class='text-center'>
-        <form class="form-signin" method="POST" action="addUser.php"> <!--Action would point to register php file. -->
+        <form class="form-signin" method="POST" action="registerUserController.php"> <!--Action would point to register php file. -->
             <h1>FLASK</h1>
             </br>
             <h1 class="h3 mb-3 font-weight-normal">Please fill out your details</h1>
