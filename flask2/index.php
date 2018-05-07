@@ -1,30 +1,36 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<!DOCTYPE html>
+<html lang="en" >
 
-        <title>FLASK</title>
+<head>
+  <meta charset="UTF-8">
+  <title>FLASK</title>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-        <link href="css/signin.css" rel="stylesheet">
-    </head>
-    <body class='text-center'>
-        <form class="form-signin" method="post" action="#">
-            <h1>FLASK</h1>
-            </br>
-            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-            <label for="inputEmail" class="sr-only">Email address</label>
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-            <label for="inputPassword" class="sr-only">Password</label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-            <button class="btn btn-lg btn-primary btn-block button" type="submit">Sign in</button>
-            <a class="btn btn-lg btn-primary btn-block button" href="registerUser.php">
-                Register
-            </a>
-        </form>
-    </body>
+      <link rel="stylesheet" href="css/style.css">
+  
+</head>
+
+<body>
+
+  <div class="form-wrapper">
+  <h1>FLASK</h1>
+  <form class="form-signin" method="post" action="#">
+    <div class="form-item" >
+      <label for="email"></label>
+      <input type="email" name="email" required="required" placeholder="Email Address" id="inputEmail"></input>
+    </div>
+    <div class="form-item">
+      <label for="password"></label>
+      <input type="password" name="password" required="required" placeholder="Password" ></input>
+    </div>
+    <div class="button-panel">
+      <input type="submit" class="button" title="Sign In" value="Sign In"></input>
+    </div>
+  </form>
+  <div class="form-footer">
+    <p><a href="registerUser.php">Create an account</a></p>
+  </div>
+</div>
+  
+</body>
+
 </html>
