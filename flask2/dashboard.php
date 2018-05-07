@@ -1,3 +1,11 @@
+<?php
+    session_start();
+
+	  if(!isset($_SESSION['user'])){
+        header("location: index.php");
+        exit();
+    }
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -9,7 +17,8 @@
     <!-- Bootstrap core CSS -->
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   </head>
 
   <body>
@@ -39,15 +48,13 @@
         </ul>
         <ul class="navbar-nav">       
             <li class="nav-item mr-auto">
-                <a class="nav-link btn btn-danger text-white" href="#">Log Out</a>
+                <a class="nav-link btn btn-danger text-white" href="logout_Controller.php">Log Out</a>
             </li>
         </ul>
     
       </div>
   </nav>
-  <?php
-    
-  ?>
+  
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
