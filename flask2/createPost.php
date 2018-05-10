@@ -17,44 +17,53 @@
     <!-- Bootstrap core CSS -->
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link href="css/createPost.css" rel="stylesheet">
   </head>
 
   <body>
 
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <a class="navbar-brand" href="#">Flask ~ Dash</a>
+      <a class="navbar-brand" href="#">Flask ~ Create Post</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item ml-3">
-            <a class="nav-link btn btn-outline-primary text-white" href="createPost.php">Create Post</a>
-          </li>
-          <li class="nav-item ml-3">
-            <a class="nav-link btn btn-outline-primary text-white" href="#">Edit Post</a>
-          </li>
-          <li class="nav-item ml-3">
-            <a class="nav-link btn btn-outline-primary text-white" href="#">Delete Post</a>
+            <a class="nav-link btn btn-outline-primary text-white" href="dashboard.php">Go Back to Dashboard</a>
           </li>
           <li class="nav-item ml-3">
                 <a class="nav-link btn btn-outline-primary text-white" href="#">View My Dash</a>
           </li> 
           <li class="nav-item ml-3">
                 <a class="nav-link btn btn-outline-primary text-white" href="#">View My Profile</a>
-          </li> 
+          </li>
         </ul>
         <ul class="navbar-nav">       
             <li class="nav-item mr-auto">
-                <a class="nav-link btn btn-danger text-white" href="logout_Controller.php">Log Out</a>
+                <a class="nav-link btn btn-danger text-white" href="#">Log Out</a>
             </li>
         </ul>
-    
       </div>
   </nav>
-  
+  <form class="form-signin" method="POST" action="createPostController.php" enctype="multipart/form-data">
+                         <!--Action would point to createPostController php file. -->
+        <h1>Create a post</h1>
+        <hr>
+        <div class="form-group">
+            <p>Add a picture</p>
+            <label for="picture" class="custom-file-label">Add a picture</label>
+            <input type="file" id="picture" name="picture" class="form-control-file" placeholder="Add a picture">
+        </div>
+        
+        <label for="quotes" class="sr-only">Add a quote</label>
+            <input type="text" id="quotes" name="quotes" class="form-control" placeholder="Add a quote">
+
+        <label for="textArea" class="sr-only">Add some text</label>
+            <textarea class="form-control" id="textArea" name="textArea" rows="6" placeholder="Add some text"></textarea>
+        <br>
+        <input class = "btn btn-lg btn-primary btn-block button" type="submit" name="submit" value="Submit Post!" />
+  </form>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

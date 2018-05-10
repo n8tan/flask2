@@ -1,5 +1,8 @@
+
+
 <?php
     session_start();
+  
 
 	if(isset($_SESSION['user'])){
         header("location: dashboard.php");
@@ -15,6 +18,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
   </head>
 
 <body>
@@ -42,12 +46,14 @@
       <div class="button-panel">
         <input type="submit" class="button" title="Sign In" value="Sign In"></input>
       </div>
+      <a href="login-with.php?provider=Facebook">Login With Facebook</a>
+      <a href="login-with.php?provider=Google">Login With Google</a>
     </form>
     <div class="form-footer">
       <p><a href="registerUser.php">Create an account</a></p>
     </div>
 </div>
-  
+
 </body>
 
 </html>
