@@ -112,9 +112,11 @@
         ///////
         echo "<div class='col-sm-6'>";
         echo "<h4>Comments</h4>";
-        foreach($entry['comments'] as $comment) {
-            echo "<h5>".$comment['user']."</h5>";
-            echo "<p>".$comment['comment']."</p>";
+        if(!empty($entry['comments'])) {
+            foreach($entry['comments'] as $comment) {
+                echo "<h5>".$comment['user']."</h5>";
+                echo "<p>".$comment['comment']."</p>";
+            }
         }
         echo "</div>";
         echo "<br>";
