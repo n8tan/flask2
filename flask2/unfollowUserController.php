@@ -26,23 +26,9 @@ session_start();
     content will be saved as post + utc time
     */ 
 
-    //Retrieving the stuff typed in the editor by the user 
-    $editorData = $_POST['about'];
-
     //Retrieving current user
     $currentUser = $_SESSION['user'];
-
-    //Get Unix Time
-    $time = time();
-    
-    //Create file path (contentLink)
-    $file_loc = "posts/blog".strval($time).".html";
-    
-    $timestamp = gmdate("Y-m-d\TH:i:s\Z");
-
-    $myfile = fopen($file_loc, "w") or die("Unable to open file!");
-    fwrite($myfile, $editorData);
-    fclose($myfile);
+    $userToFollow = $_GET['user'];
 
     //Load the library
     require 'vendor/autoload.php';
@@ -54,18 +40,30 @@ session_start();
     $db = $connection->flask2w;
 
     //Connect to the collection 'posts' in 'flask2' db
-    $collection = $db->posts;
+    $collection = $db->users;
 
-    $newPost = array(
-        "author" => $currentUser,
-        "contentLink" => $file_loc,
-        "timestamp" => $timestamp,
-        "time" => $time
-     );
+    $targetUser =  array('username' => ($currentUser));
+    
+   
+    $followOperations = array('$pull' => array (
+            "following" => array (
+                "user" => ($userToFollow)
+            )
+         )  
+    );
+    
+    $cursor2 = $collection->updateOne($targetUser,$followOperations, array("upsert" => true));
 
-     $collection->InsertOne($newPost);
+    //db.users.update({"username" : "BOB5"},{$pull: { "following": {"user" : "BOB5"} } } )    
+    //db.users.update({"username" : "BOB5"},{$addToSet: { "following": {"user": "BOB4" } } })
+
+     //Todo use $exists to check if following document exist for current user
+    //TODO $AND ($EXISTS following  / $match USER)
+     
+    //echo $userToFollow;
+
 
     //redirect back to dashboard.
-    header("location: dashboard.php");
+    header("location: followList.php");
     exit();
 ?>

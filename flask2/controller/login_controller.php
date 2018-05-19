@@ -37,6 +37,8 @@ try {
     //Getting collection
     $db = $connection->flask2w;
     $collection = $db->users;
+
+    $pass = hash("sha256",$pass);
     $result = $collection->findOne(
       array(
         'email' => $user,
@@ -45,7 +47,8 @@ try {
     );
   
     if($result != NULL) {
-      $_SESSION['user'] = $user;
+      //Retrieve username
+      $_SESSION['user'] = $result['username'];
       header("location: ../dashboard.php?msg=success");
       exit();
     }else {

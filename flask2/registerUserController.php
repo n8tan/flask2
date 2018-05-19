@@ -50,7 +50,7 @@ session_start();
             $db = $connection->flask2w;
             //Connect to the collection 'users' in 'flask2' db
             $collection = $db->users;
-        
+            $password = hash("sha256",$password);
             //Prepare the data for insertion
             //data is of type associative array
             $newUser = array(

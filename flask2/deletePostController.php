@@ -26,23 +26,15 @@ session_start();
     content will be saved as post + utc time
     */ 
 
-    //Retrieving the stuff typed in the editor by the user 
-    $editorData = $_POST['about'];
-
     //Retrieving current user
     $currentUser = $_SESSION['user'];
 
-    //Get Unix Time
-    $time = time();
+    $time = $_POST['time'];
     
     //Create file path (contentLink)
     $file_loc = "posts/blog".strval($time).".html";
     
-    $timestamp = gmdate("Y-m-d\TH:i:s\Z");
-
-    $myfile = fopen($file_loc, "w") or die("Unable to open file!");
-    fwrite($myfile, $editorData);
-    fclose($myfile);
+    unlink($file_loc);
 
     //Load the library
     require 'vendor/autoload.php';
@@ -56,15 +48,8 @@ session_start();
     //Connect to the collection 'posts' in 'flask2' db
     $collection = $db->posts;
 
-    $newPost = array(
-        "author" => $currentUser,
-        "contentLink" => $file_loc,
-        "timestamp" => $timestamp,
-        "time" => $time
-     );
-
-     $collection->InsertOne($newPost);
-
+    $cursor = $collection->deleteOne( array('time' => ((int) $time)) );
+     
     //redirect back to dashboard.
     header("location: dashboard.php");
     exit();

@@ -19,7 +19,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
         #container {
@@ -40,17 +39,11 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item ml-3">
-              <a class="nav-link btn btn-outline-primary text-white" href="createPost.php">Create Post</a>
-            </li>
-            <li class="nav-item ml-3">
-              <a class="nav-link btn btn-outline-primary text-white" href="editList.php">Edit Post</a>
-            </li>
-            <li class="nav-item ml-3">
-              <a class="nav-link btn btn-outline-primary text-white" href="deleteList.php">Delete Post</a>
-            </li>
-            <li class="nav-item ml-3">
-                  <a class="nav-link btn btn-outline-primary text-white" href="#">View My Profile</a>
+            <a class="nav-link btn btn-outline-primary text-white" href="dashboard.php">Go Back to Dashboard</a>
             </li> 
+            <li class="nav-item ml-3">
+                <a class="nav-link btn btn-outline-primary text-white" href="#">View My Profile</a>
+            </li>
             <li class="nav-item ml-3">
                 <a class="nav-link btn btn-outline-primary text-white" href="followList.php">Follow Users</a>
             </li>
@@ -80,7 +73,6 @@
       //Select the collection
       $collection = $db->posts;
 
-      $collection2 = $db->users;
       $page  = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
       //Amount of posts per page.
@@ -88,39 +80,11 @@
       $skip  = ($page - 1) * $limit;
       $next  = ($page + 1);
       $prev  = ($page - 1);
-        //////////////////////////////////////////
-
-        //Retrieve a list of following for current user
-        
-      //Retrieve a list of following for current user
-      $followOperations = array (
-        '$and' => array (
-            array ( 'username' => ($_SESSION['user'])),
-            array ('following' => array (
-                '$exists' => true
-            ))
-        )
-    );
-
-
-      $cursor2 = $collection2->findOne($followOperations);
-      $followArray = [];
-      if(!empty($cursor2)){
-        $followList = $cursor2['following'];
-        
-
-        foreach($followList as $user) {
-            array_push($followArray, $user['user']);
-        }
-        array_push($followArray, $_SESSION['user']);
-        
-      }else {
-        array_push($followArray, $_SESSION['user']);
-      }
-     
-        /////////////////////////////////////////
-
+      
       $operations  = array(
+        array('$match' => array(
+            'author' => ($_SESSION['user'])
+        )),
         array('$skip' => ($skip)),
         array('$limit' => ($limit)),
         array('$sort' => array(
@@ -134,31 +98,28 @@
       //Show the data.
       $counter = 0;
       foreach ($cursor as $entry) {
-          $currentEntryUser = $entry['author'];
-          
-          if(in_array($currentEntryUser, $followArray)) {
-            echo "<div class='card-deck'>";
-                    echo "<div class='col-sm-6'>";
-                        echo "<div class='card'>";
-                            echo "<div class='card-body'>";
-                                echo "<h5 class='card-title'>".$entry['author']." -> Post #".$entry['time']."</h5>";
-                                    echo "<div id='container'>";
-                                        echo "<div id='editor".$counter."'>";
-                                            echo file_get_contents($entry['contentLink']);
-                                        echo "</div>";      
-                                    echo "</div>";  
-                                    echo "<a href='viewPost.php?post=".$entry['time']."&page=".$page."' class='btn btn-primary'>View post</a>";
-                            echo "</div>";
-                            
-                        echo "</div>";
-                        
-                    echo "</div>";
-            echo "</div>";
-          }
+          echo "<div class='card-deck'>";
+                  echo "<div class='col-sm-6'>";
+                      echo "<div class='card'>";
+                          echo "<div class='card-body'>";
+                              echo "<h5 class='card-title'>".$entry['author']." -> Post #".$entry['time']."</h5>";
+                                  echo "<div id='container'>";
+                                      echo "<div id='editor".$counter."'>";
+                                          echo file_get_contents($entry['contentLink']);
+                                      echo "</div>";      
+                                  echo "</div>";  
+                                  echo "<a href='editPost.php?post=".$entry['time']."&page=".$page."' class='btn btn-primary'>Edit this post</a>";
+                          echo "</div>";
+                          
+                      echo "</div>";
+                      
+                  echo "</div>";
+          echo "</div>";
           $counter = $counter + 1;
       }
+
+      $total= $collection->count(array('author'=>($_SESSION['user']))); 
       
-      $total= $collection->count(); 
       if($page > 1){
           echo '<a href="?page=' . $prev . '">Previous</a>';
           if($page * $limit < $total) {

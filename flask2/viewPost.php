@@ -4,7 +4,7 @@
 	  if(!isset($_SESSION['user'])){
         header("location: index.php");
         exit();
-      }
+    }
 ?>
 <!doctype html>
 <html lang="en">
@@ -17,15 +17,24 @@
     <!-- Bootstrap core CSS -->
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-    <link href="css/createPost.css" rel="stylesheet">
-   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
- 
+    <style>
+        #container {
+            border: 1px solid black;
+            height: 450px;  /* You can change this value */
+            padding-top: 41px;
+        }
+        textarea {
+            resize:none;
+        }
+    </style>
   </head>
 
   <body>
 
-     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <nav class="navbar navbar-expand-md navbar-dark navbar-static-top bg-dark">
         <a class="navbar-brand" href="#">Flask ~ Dash</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -34,7 +43,7 @@
           <ul class="navbar-nav mr-auto">
             <li class="nav-item ml-3">
                 <a class="nav-link btn btn-outline-primary text-white" href="dashboard.php">Go Back to Dashboard</a>
-            </li>
+            </li> 
             <li class="nav-item ml-3">
                 <a class="nav-link btn btn-outline-primary text-white" href="#">View My Profile</a>
             </li>
@@ -64,6 +73,12 @@
       $collection = $db->posts;
 
       $page  = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+
+      //Amount of posts per page.
+      $limit = 10;
+      $skip  = ($page - 1) * $limit;
+      $next  = ($page + 1);
+      $prev  = ($page - 1);
       
       $operations  = array(
         array('$match' => array(
@@ -75,33 +90,52 @@
       $cursor = $collection->aggregate($operations);
       
       //Show the data
+    foreach ($cursor as $entry) {
+        echo "<div class='card-deck'>";
+                echo "<div class='col-sm-6'>";
+                    echo "<div class='card'>";
+                        echo "<div class='card-body'>";
+                            echo "<h5 class='card-title'>".$entry['author']." -> Post #".$entry['time']."</h5>";
+                                echo "<div id='container'>";
+                                    echo "<div id='editor'>";
+                                        echo file_get_contents($entry['contentLink']);
+                                    echo "</div>";      
+                                echo "</div>";  
+                                echo "<a href='dashboard.php?page=".$page."' class='btn btn-primary'>Go Back</a>";
+                        echo "</div>";
+                        
+                    echo "</div>";
+                    
+                echo "</div>";
+        echo "</div>";    
 
-      foreach ($cursor as $entry) {
-
-        
-        echo "<form class='form-signin' method='POST' action='editPostController.php' enctype='multipart/form-data'>";
-        echo "<h1>Edit post</h1>";
-        echo "<hr>";
-        echo "<div class='form-group'>";
-
-        echo "<input name='time' type ='hidden'>";
-        echo "<input name='about' type='hidden'></div>";
-        
-        echo "<div id='editor'>";
-            echo file_get_contents($entry['contentLink']);
-        echo "</div>";
+        ///////
+        echo "<div class='col-sm-6'>";
+        echo "<h4>Comments</h4>";
+        foreach($entry['comments'] as $comment) {
+            echo "<h5>".$comment['user']."</h5>";
+            echo "<p>".$comment['comment']."</p>";
+        }
         echo "</div>";
         echo "<br>";
-        echo "<input class = 'btn btn-lg btn-primary btn-block button' type='submit' name='submit' value='Submit Post!'/>";
-        echo "<a href='editList.php?page=".$page."' class='btn btn-primary'>Go Back to List</a>";
-        echo "</form>";
+        ///////
+
+        echo "<div class='col-sm-6'>";
+ echo "<form class='form-signin' method='POST' action='addCommentController.php?post=".$_GET['post']."&page=".$page."' enctype='multipart/form-data'>";
+        echo "<h4>Insert Comment</h4>";
+        echo "<div class='form-group'>";
+            echo "<textarea class='form-control' rows='2' id='comment' name='comment'></textarea>";
+            echo "<input class = 'btn btn-lg btn-primary btn-block button' type='submit' name='submit' value='Add Comment!'/>";
+        echo "</div>";
+        echo "<br>";
         
-      }
+        
+        echo "</form>";
+        echo "</div>";
+    }
+        
     ?>
 
-
-
-    
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -141,20 +175,11 @@
         
         var quill = new Quill('#editor', {
             modules: {
-                toolbar: toolbarOptions
+                toolbar: false
             },
             theme: 'snow',
-            placeholder: 'Type in your post here...'
+            readOnly: true
         });
-
-        var form = document.querySelector('form');
-        form.onsubmit = function() {
-            // Populate hidden form on submit
-            var about = document.querySelector('input[name=about]');
-            about.value = quill.root.innerHTML;
-            var time = document.querySelector('input[name=time]');
-            time.value = <?php echo $_GET['post']?>
-        };
     </script>
   </body>
 </html>
